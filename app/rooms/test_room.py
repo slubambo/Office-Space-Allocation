@@ -3,53 +3,46 @@ from .room import Room
 
 
 class RoomTests(unittest.TestCase):
-    # Test methods in class Room
 
-    def test_single_room_creation(self):
+    def test_create_room_successfully(self):
+        my_class_instance = Room()
+        initial_room_count = len(my_class_instance.allRooms)
+        blue_office = my_class_instance.create_room("office", "Blue")
+        self.assertTrue(blue_office)
+        new_room_count = len(my_class_instance.allRooms)
+        self.assertEqual(new_room_count - initial_room_count, 1)
 
-        result = Room.create_room("Office", "Mandela")
+    def test_create_multiple_rooms_successfully(self):
+        my_room_instance = Room()
+        initial_room_count = len(my_room_instance.allRooms)
+        new_offices = my_room_instance.create_room("office", "Blue", "Orange", "Green", "Cream", "Mandela")
+        self.assertTrue(new_offices)
+        new_room_count = len(my_room_instance.allRooms)
+        self.assertEqual(new_room_count - initial_room_count, 5)
 
-        self.assertEqual("You have created a new office called Mandela!", result,
-                         msg='Should create Office called Mandela')
+    def test_create_unknown_office_type(self):
+        my_room_instance = Room()
 
-    def test_other_room_not_office_nor_livingSpace(self):
+        result = my_room_instance.create_room("Pantry", "Blue", "Orange")
 
-        result = Room.create_room("Pantry", "Mandela")
+        self.assertEqual("Wrong office type or Wrong Data type for Office!", result,
+                         msg='Office types are Office and Living room only')
 
-        self.assertEqual("You can only create rooms of type Office or Living Space", result,
-                         msg='Rooms can either be of type Office or Living Space')
+    def test_create_wrong_office_type_data_type(self):
+        my_room_instance = Room()
 
-    def test_multiple_rooms_creation(self):
-        self.assertEqual(Room.create_room(self, "Office", "Mandela", "Angola", "Nigeria", "Ghana", "Nairobi"),
-                         "You have created the following offices: \n Mandela \n Angola \n Nigeria \n Ghana \n Nairobi")
+        result = my_room_instance.create_room(1, "Blue", "Orange")
 
-    def test_type_other_variables_other_than_string(self):
+        self.assertEqual("Input must contain the room type, at-least one room name and all inputs must be strings", result,
+                         msg='Office types are Office and Living room only')
 
-        result = Room.create_room(1, "Mandela")
+    def test_create_wrong_office_name_data_type(self):
+        my_room_instance = Room()
 
-        self.assertEqual("Room type is a string: Office or LivingSpace", result,
-                         msg='Enter room type as a string: Office or Living Space')
+        result = my_room_instance.create_room("Office", "Blue", 1, "Green", True, "Purple")
 
-    def test_name_other_variables_other_than_string(self):
-
-        result = Room.create_room("Office", True)
-
-        self.assertEqual("Room name can only be a string", result,
-                         msg='Enter room name as a string eg. Orange')
-
-    def test_class_room(self):
-
-        room_instance = Room()
-        sample_office = Room.create_room("Office", "sampleOffice")
-        sample_living_space = Room.create_room("Living Space", "sampleLivingSpace")
-
-        total_rooms = Room.allRooms
-        total_offices = Room.allOffices
-        total_living_spaces = Room.allLivingRooms
-
-        self.assertEqual(len(total_rooms), 2)
-        self.assertEqual(len(total_offices), 1)
-        self.assertEqual(len(total_living_spaces), 1)
+        self.assertEqual("Input must contain the room type, at-least one room name and all inputs must be strings", result,
+                         msg='Office names can only be strings')
 
 
 if __name__ == '__main__':
