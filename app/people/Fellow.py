@@ -1,4 +1,7 @@
-class Fellow(object):
-    def __init__(self):
-        self.room
-        self.has_living_room
+from app.people.person import Person
+
+
+class Fellow(Person):
+    def __init__(self, name):
+        super(Fellow, self).__init__(name, "Fellow")
+        self.LivingSpace = ""
