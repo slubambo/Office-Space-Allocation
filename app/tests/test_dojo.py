@@ -27,6 +27,7 @@ class DojoTests(unittest.TestCase):
                          msg='No rooms available!')
 
     def test_assign_room_successfully(self):
+
         dojo_instance = Dojo()
 
         new_staff = dojo_instance.create_person("staff", "Simon")

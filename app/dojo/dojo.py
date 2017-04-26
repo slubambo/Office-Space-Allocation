@@ -5,6 +5,8 @@ from app.rooms.living_space import LivingSpace
 
 from app.helpers import general_helper
 
+import random
+
 
 class Dojo(object):
     def __init__(self):
@@ -18,7 +20,7 @@ class Dojo(object):
 
         self.assignedRooms = []
 
-# <editor-fold desc="This region is for methods that deal with person">
+    # <editor-fold desc="This region is for methods that deal with person">
     def create_person(self, person_type, *args):
 
         if len(args) >= 1 and all(isinstance(item, str) for item in args):
@@ -27,13 +29,14 @@ class Dojo(object):
                 staff = Staff(" ".join(str(x) for x in args))
                 self.allPeople.append(staff)
                 self.allStaff.append(staff)
+
+                return staff
             else:
                 fellow = Fellow(" ".join(str(x) for x in args))
                 self.allPeople.append(fellow)
                 self.allFellows.append(fellow)
 
-            return self
-
+                return fellow
         else:
             return "At least one name is needed and all names must be strings"
 
@@ -52,27 +55,39 @@ class Dojo(object):
 
             return available_rooms
 
-
-
-    def assign_room(self, person_type, person_object, needs_office = False):
-        if len(self.allRooms <= 0):
+    def assign_room(self, person_type, person_object, needs_living_space=False):
+        if len(self.allRooms) <= 0:
 
             print("No Rooms available")
             return "No Rooms available"
 
         else:
             # first assign office office
-            if len(self.allOffices <= 0):
+            if len(self.allOffices) <= 0:
                 print("No Office Space available")
                 return "No Office Space available"
             else:
-                pass
+                if person_object.office == "":
+                    available_offices = self.get_available_rooms("office")
+                    if len(available_offices) >= 1:
+                        
+                        office_to_assign = random.choice(available_offices)
+                        person_object.office = office_to_assign.name
 
-    
+                        office_to_assign.occupants += 1
+                        self.assignedRooms.append(office_to_assign)
 
-# </editor-fold>
+                        return self
+                    else:
+                        print("No available offices found")
+                else:
+                    print("Already has office")
 
-# <editor-fold desc="This region contains methods that deal with room">
+
+
+                # </editor-fold>
+
+                # <editor-fold desc="This region contains methods that deal with room">
 
     def create_room(self, *args):
 
