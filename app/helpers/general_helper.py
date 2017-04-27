@@ -10,30 +10,22 @@ def remove_list_duplicates(list_entered):
 
 
 def binary_search_if_item_in_list(list_entered, target):
-    lower = 0
-    upper = len(list_entered)
-    count = 0
 
-    while lower < upper:
+    sorted_list = sorted(list_entered)
+    first = 0
+    last = len(sorted_list) - 1
+    found = False
 
-        x = lower + (upper - lower) // 2
+    print(len(list_entered))
 
-        val = list_entered[x]
-
-        count += 1
-
-        if target == val:
-
-            return True
-
-        elif target > val:
-            if lower == x:
-                break
-
-            lower = x
-
-        elif target < val:
-            upper = x
-
+    while first <= last and not found:
+        middle = (first + last) // 2
+        if sorted_list[middle].name == target:
+            found = True
         else:
-            return False
+            if target != sorted_list[middle]:
+                last = middle - 1
+            else:
+                first = middle + 1
+    return found
+

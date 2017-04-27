@@ -236,11 +236,28 @@ class Dojo(object):
     # <editor-fold desc="Task 1 methods for printing rooms">
 
     def print_room(self, room_name):
+
         if not isinstance(room_name, str):
             raise ValueError('Room type must be passed as a string.')
 
         if general_helper.binary_search_if_item_in_list(self.allRooms, room_name):
-            pass
+
+            list_of_people_in_room = []
+
+            # find if people are assigned this room
+            for person_to_check in self.allPeople:
+                if person_to_check.office.lower() == room_name.lower():
+                    list_of_people_in_room.append(person_to_check.name)
+                else:
+                    pass
+
+            if len(list_of_people_in_room) >= 1:
+
+                print(list_of_people_in_room)
+                return list_of_people_in_room
+
+            else:
+                return "No People found in this room"
         else:
             return "Room not found"
 

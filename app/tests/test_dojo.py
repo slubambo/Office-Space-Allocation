@@ -90,12 +90,36 @@ class DojoTests(unittest.TestCase):
         dojo_instance = Dojo()
         self.assertRaises(ValueError, dojo_instance.print_room, 1)
 
-    def test_add_person_few_parameters(self):
+    def test_print_room_with_no_room_with_name(self):
         dojo_instance = Dojo()
 
         result = dojo_instance.print_room("Yellow")
 
         self.assertEqual("Room not found", result, msg="Room not found")
+
+    def test_print_room_with_room_but_no_people(self):
+            dojo_instance = Dojo()
+
+            room_created = dojo_instance.create_room("office", "Blue")
+
+            self.assertTrue(room_created)
+
+            result = dojo_instance.print_room("Blue")
+
+            self.assertEqual("No People found in this room", result, msg="No People found in this room")
+
+    def test_print_room_successfully(self):
+            dojo_instance = Dojo()
+
+            # we create room, add a person and then assign them a room. Finally we print names
+            dojo_instance.create_room("office", "Blue")
+            new_staff = dojo_instance.create_person("staff", "Simon")
+
+            dojo_instance.assign_room("staff", new_staff, False)
+
+            result = dojo_instance.print_room("Blue")
+
+            self.assertTrue(result)
 
 
 
