@@ -2,11 +2,11 @@
 
 import unittest
 from app.dojo.dojo import Dojo
-from app.people.staff import Staff
+
 
 
 class DojoTests(unittest.TestCase):
-    # <editor-fold desc="Task 1 tests">
+
     def test_get_available_rooms(self):
         dojo_instance = Dojo()
 
@@ -82,10 +82,6 @@ class DojoTests(unittest.TestCase):
         new_people_count = len(dojo_instance.allPeople)
         self.assertEqual((initial_people_count + 1), new_people_count)
 
-    # </editor-fold>
-
-    # <editor-fold desc="Task 1 tests">
-
     def test_print_room_wrong_data_type(self):
         dojo_instance = Dojo()
         self.assertRaises(ValueError, dojo_instance.print_room, 1)
@@ -129,34 +125,75 @@ class DojoTests(unittest.TestCase):
 
         self.assertEqual("No Rooms found", result, msg="No Rooms found")
 
-    def test_print_allocations_successfully(self):
+    def test_print_allocations_with_no_file_successfully(self):
         dojo_instance = Dojo()
 
         dojo_instance.create_room("office", "Blue")
 
         dojo_instance.create_room("office", "Orange")
 
+        dojo_instance.create_room("living space", "CoolRoom")
+
         new_staff = dojo_instance.create_person("staff", "Simon Fred")
 
         new_staff_2 = dojo_instance.create_person("staff", "Simon Lubambo")
 
-        # new_staff_3 = dojo_instance.create_person("fellow", "Elifi Tuesday")
-
-
+        new_staff_3 = dojo_instance.create_person("fellow", "Elifi Tuesday")
 
         dojo_instance.assign_room("staff", new_staff, False)
 
         dojo_instance.assign_room("staff", new_staff_2, False)
 
-        # dojo_instance.assign_room("fellow", new_staff_3, True)
+        dojo_instance.assign_room("fellow", new_staff_3, True)
 
         result = dojo_instance.print_allocations()
 
-        # self.assertTrue(result)
+        self.assertTrue(result)
 
-        self.assertEqual("New", result, msg="New")
+    def test_print_allocations_with_file_successfully(self):
+        dojo_instance = Dojo()
 
-    # </editor-fold>
+        dojo_instance.create_room("office", "Blue")
+
+        dojo_instance.create_room("office", "Orange")
+
+        dojo_instance.create_room("living space", "CoolRoom")
+
+        new_staff = dojo_instance.create_person("staff", "Simon Fred")
+
+        new_staff_2 = dojo_instance.create_person("staff", "Simon Lubambo")
+
+        new_staff_3 = dojo_instance.create_person("fellow", "Elifi Tuesday")
+
+        dojo_instance.assign_room("staff", new_staff, False)
+
+        dojo_instance.assign_room("staff", new_staff_2, False)
+
+        dojo_instance.assign_room("fellow", new_staff_3, True)
+
+        result = dojo_instance.print_allocations("room_allocation")
+
+        self.assertTrue(result)
+
+    def test_print_allocations_with__no_rooms(self):
+        dojo_instance = Dojo()
+
+        new_staff = dojo_instance.create_person("staff", "Simon Fred")
+
+        new_staff_2 = dojo_instance.create_person("staff", "Simon Lubambo")
+
+        new_staff_3 = dojo_instance.create_person("fellow", "Elifi Tuesday")
+
+        dojo_instance.assign_room("staff", new_staff, False)
+
+        dojo_instance.assign_room("staff", new_staff_2, False)
+
+        dojo_instance.assign_room("fellow", new_staff_3, True)
+
+        result = dojo_instance.print_allocations("room_allocation")
+
+        self.assertTrue(result)
+
 
 if __name__ == '__main__':
     unittest.main()

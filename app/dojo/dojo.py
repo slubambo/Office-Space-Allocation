@@ -26,8 +26,6 @@ class Dojo(object):
         self.assignedLivingRooms = []
         self.assignedOffices = []
 
-    # <editor-fold desc="Task 0 methods for creating a room, creating a person and assigning rooms">
-
     def create_person(self, person_type, *args):
 
         if len(args) >= 1 and all(isinstance(item, str) for item in args):
@@ -39,7 +37,7 @@ class Dojo(object):
 
                 return staff
 
-            else:
+            if person_type.lower() == "fellow":
                 fellow = Fellow(" ".join(str(x) for x in args))
                 self.allPeople.append(fellow)
                 self.allFellows.append(fellow)
@@ -142,7 +140,9 @@ class Dojo(object):
             if len(self.allOffices) <= 0:
                 print("No Office Space available")
                 return "No Office Space available"
+
             else:
+
                 if person_object.office == "":
 
                     # picking available rooms
@@ -172,12 +172,15 @@ class Dojo(object):
                 if len(available_living_rooms) >= 1:
 
                     living_space_to_assign = random.choice(available_living_rooms)
+
                     person_object.LivingSpace = living_space_to_assign.name
 
                     living_space_to_assign.occupants += 1
 
                     self.assignedLivingRooms.append(living_space_to_assign)
+
                     self.assignedRooms.append(living_space_to_assign)
+
                 else:
 
                     print("No available Living rooms found")
@@ -227,26 +230,26 @@ class Dojo(object):
             print("List input must include at least 3 items (names, person type and if they want accommodation")
             return "List input must include at least 3 items (names, person type and if they want accommodation"
 
-    # </editor-fold>
-
-    # <editor-fold desc="Task 1 methods for printing rooms">
-
     def print_room(self, room_name):
 
         if not isinstance(room_name, str):
             raise ValueError('Room type must be passed as a string.')
 
-        print(general_helper.binary_search_if_item_in_list(self.allRooms, room_name))
         if general_helper.binary_search_if_item_in_list(self.allRooms, room_name):
 
             list_of_people_in_room = []
 
             # find if people are assigned this room
             for person_to_check in self.allPeople:
+
+                # checking offices
                 if person_to_check.office.lower() == room_name.lower():
                     list_of_people_in_room.append(person_to_check.name)
-                else:
-                    pass
+
+                # checking Living Spaces
+                if person_to_check.person_type == "Fellow" and person_to_check.LivingSpace.lower() == room_name.lower():
+                    list_of_people_in_room.append(person_to_check.name)
+
 
             if len(list_of_people_in_room) >= 1:
 
@@ -260,7 +263,7 @@ class Dojo(object):
 
         return None
 
-    def print_allocations(self, filename = None):
+    def print_allocations(self, filename=None):
 
         if len(self.allRooms) <= 0:
             return "No Rooms found"
@@ -269,35 +272,79 @@ class Dojo(object):
         if filename is None:
 
             for room in self.allRooms:
-                print(room.name)
+
+                print("\n")
+
+                print(room.name + "     (" + room.room_type + ")")
 
                 print("_"*40)
 
-                list_of_people_assigned = self.print_room("Blue")
+                print("")
+
+                list_of_people_assigned = self.return_list_of_people_in_room(room.name)
 
                 if isinstance(list_of_people_assigned, list):
-                    # print(','.join([str(person_name) for person_name in list_of_people_assigned]))
-                    print(', '.join(map(str,list_of_people_assigned)))
-                    return "New"
+
+                    print(', '.join(map(str, list_of_people_assigned)))
+                    print("\n")
 
                 else:
-                    print("No People assigned to this room")
+                   print("No People assigned to this room")
+                   print("\n")
 
-                    return 'No People assigned to this room'
+            return True
+
+        elif isinstance(filename, str):
+
+            file_to_print = open("resources/"+filename+".txt", "w")
+
+            for room in self.allRooms:
+
+                file_to_print.write("\n")
+                file_to_print.write(room.name + "     (" + room.room_type + ")")
+
+                file_to_print.write("\n")
+                file_to_print.write("_"*40)
+                file_to_print.write("\n")
+
+                list_of_people_assigned = self.return_list_of_people_in_room(room.name)
+
+                if isinstance(list_of_people_assigned, list):
+
+                    file_to_print.write(', '.join(map(str, list_of_people_assigned)))
+                    file_to_print.write("\n")
+
+                else:
+                    file_to_print.write("No People assigned to this room")
+                    file_to_print.write("\n")
+
+            file_to_print.close()
+
+            return True
+
         else:
 
-            return "no"
+            return None
 
-'''
-        textList = ["One", "Two", "Three", "Four", "Five"]
+    # function that simply returns a list of names. It is almost similar to the function of print_room
+    def return_list_of_people_in_room(self, room_name):
 
-        outF = open("resources/myOutFile.txt", "w")
-        for line in textList:
+        list_of_people_in_room = []
 
-            outF.write(line)
+        # find if people are assigned this room
+        for person_to_check in self.allPeople:
 
-        outF.write("\n")
-        outF.close()
-'''
+            # checking offices
+            if person_to_check.office.lower() == room_name.lower():
+                list_of_people_in_room.append(person_to_check.name)
 
-    # </editor-fold>
+            # checking Living Spaces
+            if person_to_check.person_type.lower() == "fellow":
+                if person_to_check.LivingSpace == room_name:
+                    list_of_people_in_room.append(person_to_check.name)
+
+        if len(list_of_people_in_room) >= 0:
+
+            return list_of_people_in_room
+
+
