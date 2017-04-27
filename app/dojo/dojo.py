@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 from app.people.staff import Staff
 from app.people.fellow import Fellow
 from app.rooms.office import Office
@@ -6,6 +8,7 @@ from app.rooms.living_space import LivingSpace
 from app.helpers import general_helper
 
 import random
+import sys
 
 
 class Dojo(object):
@@ -224,13 +227,6 @@ class Dojo(object):
             print("List input must include at least 3 items (names, person type and if they want accommodation")
             return "List input must include at least 3 items (names, person type and if they want accommodation"
 
-
-    # <editor-fold desc="This region contains methods from task 1">
-
-
-
-    # </editor-fold>
-
     # </editor-fold>
 
     # <editor-fold desc="Task 1 methods for printing rooms">
@@ -240,6 +236,7 @@ class Dojo(object):
         if not isinstance(room_name, str):
             raise ValueError('Room type must be passed as a string.')
 
+        print(general_helper.binary_search_if_item_in_list(self.allRooms, room_name))
         if general_helper.binary_search_if_item_in_list(self.allRooms, room_name):
 
             list_of_people_in_room = []
@@ -261,5 +258,46 @@ class Dojo(object):
         else:
             return "Room not found"
 
-        pass
+        return None
+
+    def print_allocations(self, filename = None):
+
+        if len(self.allRooms) <= 0:
+            return "No Rooms found"
+
+        # No file required so we print normally
+        if filename is None:
+
+            for room in self.allRooms:
+                print(room.name)
+
+                print("_"*40)
+
+                list_of_people_assigned = self.print_room("Blue")
+
+                if isinstance(list_of_people_assigned, list):
+                    # print(','.join([str(person_name) for person_name in list_of_people_assigned]))
+                    print(', '.join(map(str,list_of_people_assigned)))
+                    return "New"
+
+                else:
+                    print("No People assigned to this room")
+
+                    return 'No People assigned to this room'
+        else:
+
+            return "no"
+
+'''
+        textList = ["One", "Two", "Three", "Four", "Five"]
+
+        outF = open("resources/myOutFile.txt", "w")
+        for line in textList:
+
+            outF.write(line)
+
+        outF.write("\n")
+        outF.close()
+'''
+
     # </editor-fold>
