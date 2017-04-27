@@ -23,7 +23,8 @@ class Dojo(object):
         self.assignedLivingRooms = []
         self.assignedOffices = []
 
-    # <editor-fold desc="This region is for methods that deal with person">
+    # <editor-fold desc="Task 0 methods for creating a room, creating a person and assigning rooms">
+
     def create_person(self, person_type, *args):
 
         if len(args) >= 1 and all(isinstance(item, str) for item in args):
@@ -180,12 +181,6 @@ class Dojo(object):
 
         return self
 
-        # </editor-fold>
-
-        # <editor-fold desc="This region contains methods that deal with room">
-
-    # </editor-fold>
-
     def add_person(self, *args):
         if len(args) >= 3:
             # Let us split list to separate concerns accommodation
@@ -229,3 +224,25 @@ class Dojo(object):
             print("List input must include at least 3 items (names, person type and if they want accommodation")
             return "List input must include at least 3 items (names, person type and if they want accommodation"
 
+
+    # <editor-fold desc="This region contains methods from task 1">
+
+
+
+    # </editor-fold>
+
+    # </editor-fold>
+
+    # <editor-fold desc="Task 1 methods for printing rooms">
+
+    def print_room(self, room_name):
+        if not isinstance(room_name, str):
+            raise ValueError('Room type must be passed as a string.')
+
+        if general_helper.binary_search_if_item_in_list(self.allRooms, room_name):
+            pass
+        else:
+            return "Room not found"
+
+        pass
+    # </editor-fold>

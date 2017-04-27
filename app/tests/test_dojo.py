@@ -6,6 +6,7 @@ from app.people.staff import Staff
 
 
 class DojoTests(unittest.TestCase):
+    # <editor-fold desc="Task 1 tests">
     def test_get_available_rooms(self):
         dojo_instance = Dojo()
 
@@ -80,6 +81,26 @@ class DojoTests(unittest.TestCase):
         self.assertTrue(new_staff)
         new_people_count = len(dojo_instance.allPeople)
         self.assertEqual((initial_people_count + 1), new_people_count)
+
+    # </editor-fold>
+
+    # <editor-fold desc="Task 1 tests">
+
+    def test_print_room_wrong_data_type(self):
+        dojo_instance = Dojo()
+        self.assertRaises(ValueError, dojo_instance.print_room, 1)
+
+    def test_add_person_few_parameters(self):
+        dojo_instance = Dojo()
+
+        result = dojo_instance.print_room("Yellow")
+
+        self.assertEqual("Room not found", result, msg="Room not found")
+
+
+
+
+    # </editor-fold>
 
 if __name__ == '__main__':
     unittest.main()
