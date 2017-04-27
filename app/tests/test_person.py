@@ -20,7 +20,7 @@ class PersonTests(unittest.TestCase):
 
         dojo_instance = Dojo()
         initial_people_count = len(dojo_instance.allPeople)
-        new_person = dojo_instance.create_person("fellow", "Simon" "Fred")
+        new_person = dojo_instance.create_person("fellow", "Simon" "tred" "Y")
         self.assertTrue(new_person)
         new_people_count = len(dojo_instance.allPeople)
         self.assertEqual(new_people_count - initial_people_count, 1)

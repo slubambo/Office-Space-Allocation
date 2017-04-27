@@ -27,7 +27,6 @@ class DojoTests(unittest.TestCase):
                          msg='No rooms available!')
 
     def test_assign_room_successfully(self):
-
         dojo_instance = Dojo()
 
         new_staff = dojo_instance.create_person("staff", "Simon")
@@ -42,4 +41,45 @@ class DojoTests(unittest.TestCase):
 
         new_assigned_room_count = len(dojo_instance.assignedRooms)
 
-        self.assertEqual(initial_assigned_room_count - new_assigned_room_count, 1)
+        self.assertEqual((initial_assigned_room_count + 1), new_assigned_room_count)
+
+    def test_add_person_few_parameters(self):
+        dojo_instance = Dojo()
+
+        result = dojo_instance.add_person("Simon", "Fred")
+
+        self.assertEqual("List input must include at least 3 items (names, person type and if they want accommodation",
+                         result,
+                         msg='List input must include at least 3 items (names, person type and if they want '
+                             'accommodation')
+
+    def test_add_person_wrong_person_types(self):
+        dojo_instance = Dojo()
+
+        result = dojo_instance.add_person("Simon", "Fred", "Green", "Y")
+
+        self.assertEqual("Either no names were added or a wrong person type is entered", result,
+                         msg='Either no names were added or a wrong person type is entered')
+
+    def test_add_person_staff_successfully(self):
+        dojo_instance = Dojo()
+        dojo_instance.create_room("office", "Blue")
+        dojo_instance.create_room("living space", "Yellow")
+        initial_people_count = len(dojo_instance.allPeople)
+        new_staff = dojo_instance.add_person("Simon", "Fred", "Lubambo", "staff", "N")
+        self.assertTrue(new_staff)
+        new_people_count = len(dojo_instance.allPeople)
+        self.assertEqual((initial_people_count + 1), new_people_count)
+
+    def test_add_person_fellow_successfully(self):
+        dojo_instance = Dojo()
+        dojo_instance.create_room("office", "Blue")
+        dojo_instance.create_room("living space", "Yellow")
+        initial_people_count = len(dojo_instance.allPeople)
+        new_staff = dojo_instance.add_person("Simon", "Fred", "Lubambo", "fellow", "Y")
+        self.assertTrue(new_staff)
+        new_people_count = len(dojo_instance.allPeople)
+        self.assertEqual((initial_people_count + 1), new_people_count)
+
+if __name__ == '__main__':
+    unittest.main()

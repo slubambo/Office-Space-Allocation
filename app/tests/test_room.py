@@ -51,6 +51,6 @@ class RoomTests(unittest.TestCase):
         self.assertEqual("Input must contain the room type, at-least one room name and all inputs must be strings", result,
                          msg='Office names can only be strings')
 
-    
+
 if __name__ == '__main__':
     unittest.main()
