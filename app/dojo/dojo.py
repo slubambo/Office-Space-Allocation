@@ -46,8 +46,8 @@ class Dojo(object):
         else:
             return "At least one name is needed and all names must be strings"
 
-    def create_room(self, *args):
-
+    def create_room(self, args):
+        return_message = []
         if len(args) >= 2 and all(isinstance(item, str) for item in args):
 
             room_type = args[0]
@@ -61,19 +61,24 @@ class Dojo(object):
                     room_name = args[1]
 
                     if room_type == "office":
+
                         new_office = Office(room_name)
 
-                        self.allOffices.append(new_office)
-                        self.allRooms.append(new_office)
+                        if new_office not in self.allRooms:
+                            self.allOffices.append(new_office)
+                            self.allRooms.append(new_office)
+                        else:
+                            return_message.append(new_office.name + " already exits \n")
 
-                        return new_office
+                        return return_message
                     else:
                         new_living_space = LivingSpace(room_name)
 
-                        self.allLivingRooms.append(new_living_space)
-                        self.allRooms.append(new_living_space)
+                        if new_living_space not in self.allRooms:
+                            self.allLivingRooms.append(new_living_space)
+                            self.allRooms.append(new_living_space)
 
-                        return new_living_space
+                        return return_message
 
                 elif len(args) > 2:
 
@@ -84,13 +89,20 @@ class Dojo(object):
                             if room_type == "office":
                                 new_office = Office(name)
 
-                                self.allOffices.append(new_office)
-                                self.allRooms.append(new_office)
+                                if new_office not in self.allRooms:
+                                    self.allOffices.append(new_office)
+                                    self.allRooms.append(new_office)
+                                else:
+                                    return_message.append(new_office.name + " already exits \n")
+
                             else:
                                 new_living_space = LivingSpace(name)
 
-                                self.allLivingRooms.append(new_living_space)
-                                self.allRooms.append(new_living_space)
+                                if new_living_space not in self.allRooms:
+                                    self.allLivingRooms.append(new_living_space)
+                                    self.allRooms.append(new_living_space)
+                                else:
+                                    return_message.append(new_office.name + " already exits \n")
                         else:
                             pass
 

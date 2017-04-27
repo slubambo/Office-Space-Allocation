@@ -3,7 +3,7 @@
 This example uses docopt with the built in cmd module to demonstrate an
 interactive command application.
 Usage:
-    Dojo create_room <room_type> <rooms>
+    Dojo create_room <room_details>...
     Dojo (-i | --interactive)
     Dojo (-h | --help | --version)
 Options:
@@ -14,6 +14,11 @@ Options:
 import sys
 import cmd
 from docopt import docopt, DocoptExit
+
+
+from app.dojo.dojo import Dojo
+
+dojo_instance = Dojo()
 
 
 def docopt_cmd(func):
@@ -52,8 +57,16 @@ class MyInteractive (cmd.Cmd):
         + ' This application is for allocating space to the Dojo' \
         + ''\
         + ' For help, type "help" for instructions on how to start'
-    prompt = '(The Dojo) '
+    prompt = '(The Dojo >>) '
     file = None
+
+    @docopt_cmd
+    def do_create_room(self, arg):
+        """Usage: create_room <room_details>... """
+        room_details = arg['<room_details>']
+        dojo_instance.create_room(room_details)
+        print(", ".join(str(x.name) for x in dojo_instance.allRooms) + " room(s) successfully created\n")
+
 
 
     def do_quit(self, arg):
