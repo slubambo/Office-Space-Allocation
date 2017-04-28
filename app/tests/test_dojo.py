@@ -122,16 +122,16 @@ class DojoTests(unittest.TestCase):
         result = self.dojo_instance.print_allocations("room_allocation")
         self.assertTrue(result)
 
-    def test_print_unallocated_with__no_people(self):
-        new_staff = self.dojo_instance.create_person("staff", "Simon Fred")
-        new_staff_2 = self.dojo_instance.create_person("staff", "Simon Lubambo")
-        new_staff_3 = self.dojo_instance.create_person("fellow", "Elifi Tuesday")
-        self.dojo_instance.assign_room("staff", new_staff, False)
-        self.dojo_instance.assign_room("staff", new_staff_2, False)
-        self.dojo_instance.assign_room("fellow", new_staff_3, True)
-        result = self.dojo_instance.print_allocations("room_allocation")
-        self.assertTrue(result)
+    def test_print_unallocated_with_no_people(self):
+        result = self.dojo_instance.print_unallocated("room_allocation")
+        self.assertEqual("No people added to the Dojo yet", result, msg="No people added to the Dojo yet")
 
+    def test_test_print_unallocated_with_no_file_successfully(self):
+        self.dojo_instance.create_person("staff", "Simon Fred")
+        self.dojo_instance.create_person("staff", "Simon Lubambo")
+        self.dojo_instance.create_person("fellow", "Elifi Tuesday")
+        result = self.dojo_instance.print_unallocated()
+        self.assertIsInstance(result, str)
 
 if __name__ == '__main__':
     unittest.main()

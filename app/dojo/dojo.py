@@ -337,6 +337,8 @@ class Dojo(object):
             return None
 
     def print_unallocated(self, filename=None):
+        if len(self.allPeople) <= 0:
+            return "No people added to the Dojo yet"
 
         # No file required so we print normally
         if filename is None:
@@ -350,17 +352,17 @@ class Dojo(object):
                 print("")
 
                 list_of_people_un_assigned = self.return_list_of_un_allocated_people()
-
                 if len(list_of_people_un_assigned) >=1:
-
-                    print(', '.join(map(str, list_of_people_un_assigned)))
+                    names_to_print = ", ".join(str(person.name) for person in list_of_people_un_assigned);
+                    print(names_to_print)
                     print("\n")
 
                 else:
-                    print("No People without rooms")
+                    names_to_print = "No People without rooms"
+                    print(names_to_print)
                     print("\n")
 
-                return True
+                return names_to_print
 
         elif isinstance(filename, str):
 
