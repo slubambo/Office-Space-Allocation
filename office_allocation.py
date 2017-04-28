@@ -3,7 +3,8 @@
 This example uses docopt with the built in cmd module to demonstrate an
 interactive command application.
 Usage:
-    Dojo create_room <room_details>...
+    Dojo create_room <input_details>...
+    Dojo perform_action <input_details>
     Dojo (-i | --interactive)
     Dojo (-h | --help | --version)
 Options:
@@ -62,10 +63,32 @@ class MyInteractive (cmd.Cmd):
 
     @docopt_cmd
     def do_create_room(self, arg):
-        """Usage: create_room <room_details>... """
-        room_details = arg['<room_details>']
+        """Usage: create_room <input_details>... """
+        room_details = arg['<input_details>']
         dojo_instance.create_room(room_details)
-        print(", ".join(str(x.name) for x in dojo_instance.allRooms) + " room(s) successfully created\n")
+        print("Dojo has room(s): "+ ", ".join(str(x.name) for x in dojo_instance.allRooms) + " !operation successful\n")
+
+    @docopt_cmd
+    def do_add_person(self, arg):
+        """Usage: create_room <input_details>... """
+        person_details = arg['<input_details>']
+        dojo_instance.add_person(person_details)
+        print("Dojo has person(s): {0} !operation successful\n".format(
+            ", ".join(str(x.name) for x in dojo_instance.allPeople)))
+
+    @docopt_cmd
+    def do_print_room(self, arg):
+        """Usage: perform_action <input_details> """
+        room_name = arg['<input_details>']
+        print(dojo_instance.print_room(room_name))
+        print("operation successful!\n")
+
+    @docopt_cmd
+    def do_print_allocations(self, arg):
+        """Usage: perform_action <input_details> """
+        room_name = arg['<input_details>']
+        print("operation successful!\n Find file in the resources folder")
+
 
 
 

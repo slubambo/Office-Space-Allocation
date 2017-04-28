@@ -1,12 +1,8 @@
 
 Blue     (office)
 ________________________________________
-Simon Fred, Simon Lubambo, Elifi Tuesday
+Elifi Tuesday
 
 Orange     (office)
 ________________________________________
-
-
-CoolRoom     (Living Space)
-________________________________________
-Elifi Tuesday
+Simon Fred, Simon Lubambo

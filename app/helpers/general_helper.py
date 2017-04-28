@@ -2,9 +2,9 @@ def remove_list_duplicates(list_entered):
 
     return_list = []
 
-    for n, ii in enumerate(list_entered):
-        if ii not in list_entered[:n]:
-            return_list.append(ii)
+    for n, list_item in enumerate(list_entered):
+        if list_item not in list_entered[:n]:
+            return_list.append(list_item)
 
     return return_list
 

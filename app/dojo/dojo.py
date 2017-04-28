@@ -4,11 +4,8 @@ from app.people.staff import Staff
 from app.people.fellow import Fellow
 from app.rooms.office import Office
 from app.rooms.living_space import LivingSpace
-
 from app.helpers import general_helper
-
 import random
-import sys
 
 
 class Dojo(object):
@@ -32,15 +29,19 @@ class Dojo(object):
 
             if person_type.lower() == "staff":
                 staff = Staff(" ".join(str(x) for x in args))
-                self.allPeople.append(staff)
-                self.allStaff.append(staff)
+
+                if staff not in self.allPeople:
+                    self.allPeople.append(staff)
+                    self.allStaff.append(staff)
 
                 return staff
 
             if person_type.lower() == "fellow":
                 fellow = Fellow(" ".join(str(x) for x in args))
-                self.allPeople.append(fellow)
-                self.allFellows.append(fellow)
+
+                if fellow not in self.allPeople:
+                    self.allPeople.append(fellow)
+                    self.allFellows.append(fellow)
 
                 return fellow
         else:
@@ -54,7 +55,7 @@ class Dojo(object):
 
             # checking if room type is Office or living space and if the office is a string
 
-            if isinstance(room_type, str) and (room_type.lower() == "office" or room_type.lower() == "living space"):
+            if isinstance(room_type, str) and (room_type.lower() == "office" or room_type.lower() == "livingspace"):
 
                 if len(args) == 2:
 
@@ -118,7 +119,7 @@ class Dojo(object):
 
     def get_available_rooms(self, room_type):
         if not isinstance(room_type, str):
-            raise ValueError('Room type must be passed as a list.')
+            raise TypeError('Room type must be passed as a list.')
 
         if len(self.allRooms) <= 0:
             return "No rooms available!"
@@ -150,7 +151,7 @@ class Dojo(object):
         else:
             # first assign office
             if len(self.allOffices) <= 0:
-                print("No Office Space available")
+
                 return "No Office Space available"
 
             else:
@@ -199,7 +200,7 @@ class Dojo(object):
 
         return self
 
-    def add_person(self, *args):
+    def add_person(self, args):
         if len(args) >= 3:
             # Let us split list to separate concerns accommodation
 
@@ -219,33 +220,32 @@ class Dojo(object):
                     staff_created = self.create_person("staff", *person_names)
 
                     # now assign office
-
-                    self.assign_room("staff", staff_created, False)
+                    if staff_created:
+                        self.assign_room("staff", staff_created, False)
 
                 else:
 
                     fellow_created = self.create_person("fellow", *person_names)
 
-                    if wants_accommodation.lower() == "y" or wants_accommodation.lower() == "yes":
-                        self.assign_room("fellow", fellow_created, True)
-                    else:
-                        self.assign_room("fellow", fellow_created, False)
+                    if fellow_created:
+                        if wants_accommodation.lower() == "y" or wants_accommodation.lower() == "yes":
+                            self.assign_room("fellow", fellow_created, True)
+                        else:
+                            self.assign_room("fellow", fellow_created, False)
 
                 print(self.assignedLivingRooms)
 
                 return self
+
             else:
-                print("Either no names were added or a wrong person type is entered")
                 return "Either no names were added or a wrong person type is entered"
 
         else:
-            print("List input must include at least 3 items (names, person type and if they want accommodation")
             return "List input must include at least 3 items (names, person type and if they want accommodation"
 
     def print_room(self, room_name):
-
         if not isinstance(room_name, str):
-            raise ValueError('Room type must be passed as a string.')
+            raise TypeError('Room type must be passed as a string.')
 
         if general_helper.binary_search_if_item_in_list(self.allRooms, room_name):
 
@@ -262,11 +262,9 @@ class Dojo(object):
                 if person_to_check.person_type == "Fellow" and person_to_check.LivingSpace.lower() == room_name.lower():
                     list_of_people_in_room.append(person_to_check.name)
 
-
             if len(list_of_people_in_room) >= 1:
 
-                print(list_of_people_in_room)
-                return list_of_people_in_room
+                return ", ".join(str(name) for name in list_of_people_in_room)
 
             else:
                 return "No People found in this room"
@@ -301,8 +299,8 @@ class Dojo(object):
                     print("\n")
 
                 else:
-                   print("No People assigned to this room")
-                   print("\n")
+                    print("No People assigned to this room")
+                    print("\n")
 
             return True
 
@@ -338,6 +336,64 @@ class Dojo(object):
 
             return None
 
+    def print_unallocated(self, filename=None):
+
+        # No file required so we print normally
+        if filename is None:
+
+                print("\n")
+
+                print("Unallocated People")
+
+                print("_" * 40)
+
+                print("")
+
+                list_of_people_un_assigned = self.return_list_of_un_allocated_people()
+
+                if len(list_of_people_un_assigned) >=1:
+
+                    print(', '.join(map(str, list_of_people_un_assigned)))
+                    print("\n")
+
+                else:
+                    print("No People without rooms")
+                    print("\n")
+
+                return True
+
+        elif isinstance(filename, str):
+
+            file_to_print = open("resources/" + filename + ".txt", "w")
+
+            for room in self.allRooms:
+
+                file_to_print.write("\n")
+                file_to_print.write(room.name + "     (" + room.room_type + ")")
+
+                file_to_print.write("\n")
+                file_to_print.write("_" * 40)
+                file_to_print.write("\n")
+
+                list_of_people_un_assigned = self.return_list_of_un_allocated_people()
+
+                if len(list_of_people_un_assigned) >= 1:
+
+                    file_to_print.write(', '.join(map(str, list_of_people_un_assigned)))
+                    file_to_print.write("\n")
+
+                else:
+                    file_to_print.write("No People without rooms")
+                    file_to_print.write("\n")
+
+                file_to_print.close()
+
+            return True
+
+        else:
+
+            return None
+
     # function that simply returns a list of names. It is almost similar to the function of print_room
     def return_list_of_people_in_room(self, room_name):
 
@@ -352,11 +408,27 @@ class Dojo(object):
 
             # checking Living Spaces
             if person_to_check.person_type.lower() == "fellow":
-                if person_to_check.LivingSpace == room_name:
+                if person_to_check.living_space == room_name:
                     list_of_people_in_room.append(person_to_check.name)
 
         if len(list_of_people_in_room) >= 0:
 
             return list_of_people_in_room
+
+    # function returns unallocated persons
+    def return_list_of_un_allocated_people(self):
+        list_of_un_allocated_people = []
+
+        for person in self.allPeople:
+            if person.office == "":
+                list_of_un_allocated_people.append(person)
+
+        for person in self.allFellows:
+            if person.living_space == "":
+                list_of_un_allocated_people.append(person)
+
+        return list_of_un_allocated_people
+
+
 
 
