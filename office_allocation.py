@@ -86,7 +86,15 @@ class MyInteractive (cmd.Cmd):
     @docopt_cmd
     def do_print_allocations(self, arg):
         """Usage: perform_action <input_details> """
-        room_name = arg['<input_details>']
+        filename = arg['<input_details>']
+        print(dojo_instance.print_allocations(filename))
+        print("operation successful!\n Find file in the resources folder")
+
+    @docopt_cmd
+    def do_print_unallocated(self, arg):
+        """Usage: perform_action <input_details> """
+        filename = arg['<input_details>']
+        print(dojo_instance.print_unallocated(filename))
         print("operation successful!\n Find file in the resources folder")
 
 

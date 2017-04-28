@@ -223,6 +223,8 @@ class Dojo(object):
                     if staff_created:
                         self.assign_room("staff", staff_created, False)
 
+                    return staff_created.name
+
                 else:
 
                     fellow_created = self.create_person("fellow", *person_names)
@@ -233,9 +235,7 @@ class Dojo(object):
                         else:
                             self.assign_room("fellow", fellow_created, False)
 
-                print(self.assignedLivingRooms)
-
-                return self
+                    return fellow_created.name
 
             else:
                 return "Either no names were added or a wrong person type is entered"
@@ -376,6 +376,7 @@ class Dojo(object):
             file_to_print.write("\n")
 
             list_of_people_un_assigned = self.return_list_of_un_allocated_people()
+            names_to_print = ""
 
             if len(list_of_people_un_assigned) >= 1:
                 names_to_print = ", ".join(str(person.name) for person in list_of_people_un_assigned);
@@ -389,10 +390,7 @@ class Dojo(object):
 
                 file_to_print.close()
 
-                return names_to_print
-        else:
-
-            return None
+            return names_to_print
 
     # function that simply returns a list of names. It is almost similar to the function of print_room
     def return_list_of_people_in_room(self, room_name):
@@ -425,7 +423,8 @@ class Dojo(object):
 
         for person in self.allFellows:
             if person.living_space == "":
-                list_of_un_allocated_people.append(person)
+                if person not in list_of_un_allocated_people:
+                    list_of_un_allocated_people.append(person)
 
         return list_of_un_allocated_people
 

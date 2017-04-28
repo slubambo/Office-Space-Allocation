@@ -138,7 +138,7 @@ class DojoTests(unittest.TestCase):
         self.dojo_instance.create_person("staff", "Simon Lubambo")
         self.dojo_instance.create_person("fellow", "Elifi Tuesday")
         result = self.dojo_instance.print_unallocated("unallocated")
-        self.assertIsInstance(result, list)
+        self.assertIsInstance(result, str)
 
 if __name__ == '__main__':
     unittest.main()
