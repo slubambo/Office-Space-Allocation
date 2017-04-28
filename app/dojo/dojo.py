@@ -368,30 +368,28 @@ class Dojo(object):
 
             file_to_print = open("resources/" + filename + ".txt", "w")
 
-            for room in self.allRooms:
+            file_to_print.write("\n")
+            file_to_print.write("Unallocated People")
 
+            file_to_print.write("\n")
+            file_to_print.write("_" * 40)
+            file_to_print.write("\n")
+
+            list_of_people_un_assigned = self.return_list_of_un_allocated_people()
+
+            if len(list_of_people_un_assigned) >= 1:
+                names_to_print = ", ".join(str(person.name) for person in list_of_people_un_assigned);
+                file_to_print.write(names_to_print)
                 file_to_print.write("\n")
-                file_to_print.write(room.name + "     (" + room.room_type + ")")
 
+            else:
+                names_to_print = "No People without rooms"
+                file_to_print.write(names_to_print)
                 file_to_print.write("\n")
-                file_to_print.write("_" * 40)
-                file_to_print.write("\n")
-
-                list_of_people_un_assigned = self.return_list_of_un_allocated_people()
-
-                if len(list_of_people_un_assigned) >= 1:
-
-                    file_to_print.write(', '.join(map(str, list_of_people_un_assigned)))
-                    file_to_print.write("\n")
-
-                else:
-                    file_to_print.write("No People without rooms")
-                    file_to_print.write("\n")
 
                 file_to_print.close()
 
-            return True
-
+                return names_to_print
         else:
 
             return None

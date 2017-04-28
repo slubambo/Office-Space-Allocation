@@ -133,5 +133,12 @@ class DojoTests(unittest.TestCase):
         result = self.dojo_instance.print_unallocated()
         self.assertIsInstance(result, str)
 
+    def test_test_print_unallocated_with_file_successfully(self):
+        self.dojo_instance.create_person("staff", "Simon Fred")
+        self.dojo_instance.create_person("staff", "Simon Lubambo")
+        self.dojo_instance.create_person("fellow", "Elifi Tuesday")
+        result = self.dojo_instance.print_unallocated("unallocated")
+        self.assertIsInstance(result, list)
+
 if __name__ == '__main__':
     unittest.main()
